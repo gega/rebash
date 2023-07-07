@@ -1,0 +1,1 @@
+*/10 * * * * /usr/local/bin/save-envs.sh
