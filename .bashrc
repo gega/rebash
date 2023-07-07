@@ -19,7 +19,8 @@ function env_save()
   echo "HISTORY_OVER" >>$F
   echo "history -r \${T}" >>$F
   echo "rm -f \${T}" >>$F
-  echo "cd "$(pwd) >>$F
+  echo "dirs -c" >>$F
+  dirs -p -l|tac|tail +2|awk '{print "pushd " $1}' >>$F
   echo "N=\"$(xtitle)\"" >>$F
   echo 'echo -ne "\\033]30;'\${N}'\\007"' >>$F
   echo "trap 'env_save' SIGURG" >>$F
