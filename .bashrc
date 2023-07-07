@@ -1,11 +1,12 @@
 # .bashrc
 
+# This is standard part of .bashrc-s, just make sure it's present
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 # [...]
 
-# env_save
+# rebash functonality, shell id and save function
 export ENV_ID=$(echo $$$RANDOM$(date +%s)|sha1sum|awk '{print $1}')
 function env_save()
 {
@@ -27,5 +28,7 @@ function env_save()
   mv -f "$F" "$F2"
 }
 
+# Optionally, set the history size according to personal preference
+# (of course this will affect the saved state of the shells)
 HISTFILESIZE=100000
 HISTSIZE=100000
