@@ -23,5 +23,5 @@ environment on each of them.
 
 - history
 - environment variables
-- current directory
+- directory stack
 - window title
