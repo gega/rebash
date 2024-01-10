@@ -9,6 +9,14 @@ Save and restore interactive bash environment
 
 3. add the crontab extract to the user (or optionally global) crontab (tested with fcron but should work with any standard cron)
 
+# restore
+
+- open an empty terminal window or tab
+- source the proper shell save file:
+
+  ```$ . ~/.SHELL_ab1b11056174abdf62dea5e7cfed4631a59067bf.sh```
+
+
 # how it works
 
 The cron will signal all interactive shells in regular intervals with
