@@ -32,7 +32,18 @@ function env_save()
   F2=~/.SHELL_${ENV_ID}.sh
   trap 'env_save' SIGURG
   mv -f "$F" "$F2"
+  touch /tmp/_SHELL_${ENV_ID}.loc
 }
+for n in $(find ~ -maxdepth 1 -name ".SHELL*sh" -printf "%T@ %p\n"|sort -nr|cut -d' ' -f2|sed -e 's/.*SHELL_//g' -e 's/[.].*$//g')
+do
+  tt=/tmp/_SHELL_${n}.loc
+  if [ ! -f ${tt} ]; then
+    source ~/.SHELL_${n}.sh
+    env_save
+    break
+  fi
+done
+
 
 # Optionally, set the history size according to personal preference
 # (of course this will affect the saved state of the shells)
