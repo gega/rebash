@@ -7,7 +7,18 @@
 # [...]
 
 # rebash functonality, shell id and save function
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a"
 export ENV_ID=$(echo $$$RANDOM$(date +%s)|sha1sum|awk '{print $1}')
+export HISTFILE=$HOME/.SHELL_history_${ENV_ID}
+function wt()
+{
+  ORIG=$PS1
+  TITLE="\e]2;$@\a"
+  PS1=${ORIG}${TITLE}
+  export SHELL_NAME="$@"
+}
+wt "bash$$"
+# env_save
 function env_save()
 {
   F=~/._SHELL_${ENV_ID}.sh
@@ -15,7 +26,7 @@ function env_save()
   echo "# $(xtitle) @ $(basename $(pwd))" >$F
   echo "T2_ENV_SAVE=\$(mktemp)" >>$F
   echo "echo \$XAUTHORITY >\${T2_ENV_SAVE}" >>$F
-  declare -p|grep -v " -[a-zA-Z]*[r][a-zA-Z]* "|grep -v XAUTHORITY|grep -v T2_ENV_SAVE >>$F
+  declare -p|grep -v " -[a-zA-Z]*[r][a-zA-Z]* "|grep -v XAUTHORITY|grep -v DBUS|grep -v T2_ENV_SAVE >>$F
   echo "T1_ENV_SAVE=\$(mktemp)" >>$F
   echo "cat <<\"HISTORY_OVER\" >\${T1_ENV_SAVE}" >>$F
   history | cut -c 8- >>$F
@@ -26,7 +37,8 @@ function env_save()
   echo "dirs -c" >>$F
   dirs -p -l|tac|tail +2|awk '{print "pushd " $1}' >>$F
   echo "cd $(pwd)" >>$F
-  echo "N=\"$(xtitle)\"" >>$F
+  echo "export HISTFILE=\$HOME/.SHELL_history_\${ENV_ID}" >>$F
+  echo "N=\"${SHELL_NAME}\"" >>$F
   echo 'echo -ne "\\033]30;'\${N}'\\007"' >>$F
   echo "trap 'env_save' SIGURG" >>$F
   F2=~/.SHELL_${ENV_ID}.sh
